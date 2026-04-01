@@ -11,7 +11,7 @@ const toCity = (query: string): City => {
 };
 
 export async function getWeatherByCity(query: string): Promise<WeatherPayload> {
-  const city = toCity(query || "New York");
+  const city = toCity(query || "Tbilisi");
 
   if (!process.env.OPEN_METEO_ENABLED) {
     return getMockWeather(city);
