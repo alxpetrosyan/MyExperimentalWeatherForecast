@@ -5,10 +5,13 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DailyForecastItem } from "@/lib/types";
 import { WeatherIcon } from "@/components/weather-icons";
 import { DayWeatherModal } from "@/components/day-weather-modal";
+import { useLanguage } from "@/components/language-provider";
+import { languageLocale, translateCondition } from "@/lib/i18n";
 
 export function WeatherCalendar({ daily }: { daily: DailyForecastItem[] }) {
   const [monthOffset, setMonthOffset] = useState(0);
   const [selectedDay, setSelectedDay] = useState<DailyForecastItem | null>(null);
+  const { t, language } = useLanguage();
 
   const baseDate = useMemo(() => {
     const d = new Date();
@@ -25,17 +28,18 @@ export function WeatherCalendar({ daily }: { daily: DailyForecastItem[] }) {
   });
 
   const dayMap = new Map(monthForecast.map((f) => [new Date(f.date).getDate(), f]));
+  const weekdayKeys = ["weekSun", "weekMon", "weekTue", "weekWed", "weekThu", "weekFri", "weekSat"];
 
   return (
     <section className="card">
       <div className="mb-4 flex items-center justify-between">
         <button className="rounded-lg p-2 hover:bg-slate-200/80 dark:hover:bg-slate-800" onClick={() => setMonthOffset((v) => v - 1)}><ChevronLeft /></button>
-        <h2 className="text-xl font-semibold">{baseDate.toLocaleDateString([], { month: "long", year: "numeric" })}</h2>
+        <h2 className="text-xl font-semibold">{baseDate.toLocaleDateString(languageLocale[language], { month: "long", year: "numeric" })}</h2>
         <button className="rounded-lg p-2 hover:bg-slate-200/80 dark:hover:bg-slate-800" onClick={() => setMonthOffset((v) => v + 1)}><ChevronRight /></button>
       </div>
 
       <div className="hidden grid-cols-7 gap-2 text-xs text-slate-500 md:grid">
-        {['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map((w) => <div key={w}>{w}</div>)}
+        {weekdayKeys.map((w) => <div key={w}>{t(w)}</div>)}
       </div>
       <div className="mt-2 hidden grid-cols-7 gap-2 md:grid">
         {Array.from({ length: startWeekday }).map((_, i) => <div key={`empty-${i}`} />)}
@@ -43,8 +47,8 @@ export function WeatherCalendar({ daily }: { daily: DailyForecastItem[] }) {
           const dayNum = idx + 1;
           const day = dayMap.get(dayNum);
           const isToday = (() => {
-            const t = new Date();
-            return t.getDate() === dayNum && t.getMonth() === baseDate.getMonth() && t.getFullYear() === baseDate.getFullYear();
+            const currentDate = new Date();
+            return currentDate.getDate() === dayNum && currentDate.getMonth() === baseDate.getMonth() && currentDate.getFullYear() === baseDate.getFullYear();
           })();
           return (
             <button
@@ -59,7 +63,7 @@ export function WeatherCalendar({ daily }: { daily: DailyForecastItem[] }) {
                 <>
                   <WeatherIcon code={day.conditionCode} className="mt-1 h-4 w-4 text-sky-500" />
                   <p className="mt-1 text-xs">{day.high}° / {day.low}°</p>
-                  <p className="truncate text-[11px] text-slate-500">Rain {day.precipitationChance}%</p>
+                  <p className="truncate text-[11px] text-slate-500">{t("rain")} {day.precipitationChance}%</p>
                 </>
               )}
             </button>
@@ -71,10 +75,10 @@ export function WeatherCalendar({ daily }: { daily: DailyForecastItem[] }) {
         {monthForecast.map((day) => (
           <button key={day.date} className="w-full rounded-xl bg-slate-100/80 p-3 text-left dark:bg-slate-800/70" onClick={() => setSelectedDay(day)}>
             <div className="flex items-center justify-between">
-              <p className="text-sm font-medium">{new Date(day.date).toLocaleDateString([], { weekday: "short", month: "short", day: "numeric" })}</p>
+              <p className="text-sm font-medium">{new Date(day.date).toLocaleDateString(languageLocale[language], { weekday: "short", month: "short", day: "numeric" })}</p>
               <span className="text-sm">{day.high}° / {day.low}°</span>
             </div>
-            <p className="mt-1 text-xs text-slate-500">{day.summary} • Rain {day.precipitationChance}%</p>
+            <p className="mt-1 text-xs text-slate-500">{translateCondition(day.summary, t)} • {t("rain")} {day.precipitationChance}%</p>
           </button>
         ))}
       </div>
