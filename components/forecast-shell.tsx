@@ -43,8 +43,8 @@ export function ForecastShell() {
 
   return (
     <PageContainer>
-      <section className="card space-y-3">
-        <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+      <section className="card space-y-3 sm:space-y-4">
+        <div className="grid gap-3 xl:grid-cols-[minmax(0,1fr)_auto] xl:items-center">
           <CitySearch cities={popularCities} onSelect={setCity} />
           <ForecastTabs mode={mode} onModeChange={setMode} />
         </div>

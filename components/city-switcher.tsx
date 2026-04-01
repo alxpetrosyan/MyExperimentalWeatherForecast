@@ -17,7 +17,7 @@ export function CitySwitcher({
           <button
             key={city.id}
             onClick={() => onSelect(city.name)}
-            className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${
+            className={`rounded-full px-3 py-2 text-xs font-medium transition sm:py-1.5 ${
               active
                 ? "bg-sky-600 text-white shadow"
                 : "bg-white/70 text-slate-700 hover:bg-white dark:bg-slate-800 dark:text-slate-200"
