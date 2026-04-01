@@ -24,15 +24,15 @@ export function WeatherDetailsGrid({ weather }: { weather: WeatherPayload }) {
   return (
     <section className="card">
       <h3 className="mb-3 text-lg font-semibold">{t("airConditions")}</h3>
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-2.5 sm:gap-3 md:grid-cols-2 xl:grid-cols-4">
         {details.map(({ icon: Icon, label, value }) => (
           <article key={label} className={itemClass}>
-            <div className="flex items-center gap-2 text-xs text-slate-500"><Icon className="h-4 w-4" /> {label}</div>
-            <p className="mt-1 text-lg font-semibold">{value}</p>
+            <div className="flex items-center gap-2 text-xs text-slate-500"><Icon className="h-4 w-4 shrink-0" /> <span className="truncate">{label}</span></div>
+            <p className="mt-1 text-base font-semibold sm:text-lg">{value}</p>
           </article>
         ))}
       </div>
-      <div className="mt-3 grid gap-3 sm:grid-cols-3">
+      <div className="mt-3 grid gap-2.5 sm:gap-3 md:grid-cols-3">
         <div className={itemClass}><p className="text-xs text-slate-500">{t("sunrise")}</p><p className="font-semibold">{d.sunrise}</p></div>
         <div className={itemClass}><p className="text-xs text-slate-500">{t("sunset")}</p><p className="font-semibold">{d.sunset}</p></div>
         <div className={itemClass}><p className="text-xs text-slate-500">{t("todayOverview")}</p><p className="font-semibold">{t("todayOverviewValue")}</p></div>
